@@ -3,9 +3,8 @@
         <h2>{{ title }}</h2>
         <!-- Loop through cards and render -->
         <draggable
-            :list="cardsList"
+            v-bind:list="cardsList"
             group="cards"
-            @change="onCardMoved"
             itemKey="id"
             @update:modelValue="emitCardChange"
             >
@@ -43,9 +42,7 @@ export default {
         emitCardChange() {
             this.$emit('update:cardsList', this.cardsList);
         },
-        onCardMoved(event) {
-            console.log('Card moved:', event);
-        }
+
     }
 };
 </script>
