@@ -2,23 +2,31 @@
     <div class="status-column">
         <h2>{{ title }}</h2>
         <!-- Loop through cards and render -->
-        <ul>
-            <li v-for="card in cardsList" v-bind:key="card.id">
+        <draggable
+            :list="cardsList"
+            group="cards"
+            @change="onCardMoved"
+            itemKey="id"
+            @update:modelValue="emitCardChange"
+            >
+            <template #item="{ element }">
                 <TaskCard 
-                    v-bind:title="card.title"
-                    v-bind:description="card.description"
+                    v-bind:title="element.title"
+                    v-bind:description="element.description"
                 />
-            </li>
-        </ul>
+            </template>
+        </draggable>
     </div>
 </template>
 
 <script>
+import draggable from 'vuedraggable';
 import TaskCard from './TaskCard.vue';
 
 export default {
     name: 'StatusColumn',
     components: {
+        draggable,
         TaskCard,
     },
     props: {
@@ -29,6 +37,14 @@ export default {
         cardsList: {
             type: Array,
             required: true
+        }
+    },
+    methods: {
+        emitCardChange() {
+            this.$emit('update:cardsList', this.cardsList);
+        },
+        onCardMoved(event) {
+            console.log('Card moved:', event);
         }
     }
 };
